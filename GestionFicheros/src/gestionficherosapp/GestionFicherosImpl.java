@@ -2,7 +2,7 @@ package gestionficherosapp;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -27,13 +27,13 @@ public class GestionFicherosImpl implements GestionFicheros {
 	private void actualiza() {
 
 		String[] ficheros = carpetaDeTrabajo.list(); // obtener los nombres
-		// calcular el número de filas necesario
+		// calcular el nï¿½mero de filas necesario
 		filas = ficheros.length / columnas;
 		if (filas * columnas < ficheros.length) {
-			filas++; // si hay resto necesitamos una fila más
+			filas++; // si hay resto necesitamos una fila mï¿½s
 		}
 
-		// dimensionar la matriz contenido según los resultados
+		// dimensionar la matriz contenido segï¿½n los resultados
 
 		contenido = new String[filas][columnas];
 		// Rellenar contenido con los nombres obtenidos
@@ -63,9 +63,9 @@ public class GestionFicherosImpl implements GestionFicheros {
 	@Override
 	public void creaCarpeta(String arg0) throws GestionFicherosException {
 		File file = new File(carpetaDeTrabajo,arg0);
-		//que se pueda escribir -> lanzará una excepción
-		//que no exista -> lanzará una excepción
-		//crear la carpeta -> lanzará una excepción
+		//que se pueda escribir -> lanzarï¿½ una excepciï¿½n
+		//que no exista -> lanzarï¿½ una excepciï¿½n
+		//crear la carpeta -> lanzarï¿½ una excepciï¿½n
 		actualiza();
 	}
 
@@ -95,7 +95,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 			throw new GestionFicherosException("Alerta. No se puede acceder a "
 					+ file.getAbsolutePath() + ". No hay permiso");
 		}
-		// nueva asignación de la carpeta de trabajo
+		// nueva asignaciï¿½n de la carpeta de trabajo
 		carpetaDeTrabajo = file;
 		// se requiere actualizar contenido
 		actualiza();
@@ -145,13 +145,13 @@ public class GestionFicherosImpl implements GestionFicheros {
 		StringBuilder strBuilder=new StringBuilder();
 		File file = new File(carpetaDeTrabajo,arg0);
 		
-		//Controlar que existe. Si no, se lanzará una excepción 
-		//Controlar que haya permisos de lectura. Si no, se lanzará una excepción
+		//Controlar que existe. Si no, se lanzarï¿½ una excepciï¿½n 
+		//Controlar que haya permisos de lectura. Si no, se lanzarï¿½ una excepciï¿½n
 		try{
 			if(file.exists()==true || file.canRead()==true){
 				
-				//Título
-				strBuilder.append("INFORMACIÓN DEL SISTEMA");
+				//Tï¿½tulo
+				strBuilder.append("INFORMACIï¿½N DEL SISTEMA");
 				strBuilder.append("\n\n");
 				
 				//Nombre
@@ -175,7 +175,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 					System.err.println("Error al detectar el tipo de archivo.");
 				}
 					
-				//Ubicación
+				//Ubicaciï¿½n
 				strBuilder.append("Ubicacion: ");
 				try{
 					String rutaCanonica = file.getCanonicalPath();
@@ -186,21 +186,11 @@ public class GestionFicherosImpl implements GestionFicheros {
 					System.err.println("No se encuentra la ruta de dicho archivo.");
 				}
 				
-				//Fecha de última modificación
+				//Fecha de ï¿½ltima modificaciï¿½n
 				strBuilder.append("Ultima modificacion: ");
 				try{
-					Long fechaUltimaMod = file.lastModified();
-					String fechaUltimaModificacion = String.valueOf(fechaUltimaMod);
-					
-					// Creacion de un formato de fecha
-					SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
-					try {
-						//Conversion a dato de tipo Date el String que recoje la fecha de la ultima modificacion del archivo
-						Date fecha = (Date) formatoFecha.parse(fechaUltimaModificacion);
-					} catch (ParseException error) {
-							System.err.println("Error al convertir a formato de fecha.");
-					}
-					strBuilder.append(fechaUltimaModificacion);
+					Date fecha = new Date(file.lastModified());
+					strBuilder.append(fecha);
 					strBuilder.append("\n");
 				}
 				catch(SecurityException  error){
@@ -224,24 +214,24 @@ public class GestionFicherosImpl implements GestionFicheros {
 				}
 				
 				//Si es directorio: Espacio libre, espacio disponible, espacio total
-				strBuilder.append("MAS INFORMACIÓN");
+				strBuilder.append("MAS INFORMACIï¿½N");
 				strBuilder.append("\n\n");
 				
 				try{
 					if(file.isFile()==true){
-						//Tamaño en bytes de el fichero seleccionado
-						strBuilder.append("Tamaño: ");
+						//Tamaï¿½o en bytes de el fichero seleccionado
+						strBuilder.append("Tamaï¿½o: ");
 						//Almacenamiento de datos en variable
-						Long tamañoBytes = file.length();
+						Long tamaÃ±oBytes = file.length();
 						//Conversion de datos tipo Long a String
-						String tBytes = String.valueOf(tamañoBytes);
+						String tBytes = String.valueOf(tamaÃ±oBytes);
 						//Concatenacion a la cadena 
 						strBuilder.append(tBytes+" bytes");
 						strBuilder.append("\n");
 					}
 					else if(file.isDirectory()==true){
 						//Numero de elementos que contiene el directorio seleccionado
-						strBuilder.append("Nº elementos: ");
+						strBuilder.append("Nï¿½ elementos: ");
 						Long numArchivos = file.length();
 						String nArchivos = String.valueOf(numArchivos);
 						strBuilder.append(nArchivos+" en total");
@@ -360,7 +350,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 	public void setDirCarpeta(String arg0) throws GestionFicherosException {
 		File file = new File(arg0);
 
-		// se controla que la dirección exista y sea directorio
+		// se controla que la direcciï¿½n exista y sea directorio
 		if (!file.isDirectory()) {
 			throw new GestionFicherosException("Error. Se esperaba "
 					+ "un directorio, pero " + file.getAbsolutePath()
