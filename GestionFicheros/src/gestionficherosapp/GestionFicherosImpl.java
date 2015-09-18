@@ -69,18 +69,22 @@ public class GestionFicherosImpl implements GestionFicheros {
 		//Comprobamos que  no existe y se tienen permisos
 		try{
 			if(file.exists()==false && carpetaDeTrabajo.canWrite()==true){
+					//Creamos el directorio
 					file.mkdir();
+					//Mostramos por consola la confirmación
 					System.out.println("Directorio creado correctamente.");
 			}
 			else{
+					//Si baja el flujo y se entra  aquí, se muestra una ventanita informativa y se muestra un mensaje por consola
 					JOptionPane.showMessageDialog(null, "El directorio ya existe.");
 					System.err.println("No se pudo crear la carpeta.");
 			}
 		}
+		//Capturamos la excepcion en caso de que falle la creación del fichero
 		catch(SecurityException error){
 			System.err.println("Error al crear la carpeta.");
 		}
-		
+		//Este metodo actualiza la lista de archivos de dicho directorio
 		actualiza();
 	}
 
@@ -93,7 +97,9 @@ public class GestionFicherosImpl implements GestionFicheros {
 				try{
 					if(file.exists()==false && carpetaDeTrabajo.canWrite()==true){
 							try {
+								//Creamos el nuevo fichero
 								file.createNewFile();
+								//Mostramos por consola la confirmación
 								System.out.println("Fichero creado correctamente.");
 							} 
 							catch (IOException error) {
@@ -105,10 +111,11 @@ public class GestionFicherosImpl implements GestionFicheros {
 							System.err.println("No se pudo crear el fichero.");
 					}
 				}
+				//Capturamos la excepcion en caso de que falle la creación del fichero
 				catch(SecurityException error){
 					System.err.println("Error al crear el fichero.");
 				}
-				
+				//Este metodo actualiza la lista de archivos de dicho directorio
 				actualiza();
 	}
 
@@ -120,14 +127,16 @@ public class GestionFicherosImpl implements GestionFicheros {
 		//Si existe el archivo, lo eliminamos.
 		try{
 			if(file.exists()==true && file.canWrite()==true){
+				//Eliminacion del fichero
 				file.delete();
+				//""
 				System.out.println("Archivo eliminado correctamente.");
 			}
 		}
 		catch(SecurityException error){
 			System.err.println("No se pudo eliminar dicho archivo.");
 		}
-
+		//Este metodo actualiza la lista de archivos de dicho directorio
 		actualiza();
 	}
 
@@ -368,7 +377,22 @@ public class GestionFicherosImpl implements GestionFicheros {
 	@Override
 	public void renombra(String arg0, String arg1) throws GestionFicherosException {
 		// TODO Auto-generated method stub
-
+		File file = new File(carpetaDeTrabajo,arg0);
+		//File con nuevo nombre
+		File file1 = new File(carpetaDeTrabajo, arg1);
+		//Renombrar el fichero en caso de que exista y tenga permisos de escritura
+		try{
+			if(file.exists()==true && file.canWrite()==true){
+						if(file.renameTo(file1)==true){
+							System.out.println("Archivo renombrado correctamente");
+						}
+					}
+		}
+		catch(SecurityException error){
+			System.err.println("No se pudo renombrar el archivo.");
+		}
+		//Este metodo actualiza la lista de archivos de dicho directorio
+		actualiza();
 	}
 
 	@Override
