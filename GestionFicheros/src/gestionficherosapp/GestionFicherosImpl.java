@@ -6,6 +6,8 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.swing.JOptionPane;
+
 import gestionficheros.FormatoVistas;
 import gestionficheros.GestionFicheros;
 import gestionficheros.GestionFicherosException;
@@ -63,22 +65,70 @@ public class GestionFicherosImpl implements GestionFicheros {
 	@Override
 	public void creaCarpeta(String arg0) throws GestionFicherosException {
 		File file = new File(carpetaDeTrabajo,arg0);
-		//que se pueda escribir -> lanzar� una excepci�n
-		//que no exista -> lanzar� una excepci�n
-		//crear la carpeta -> lanzar� una excepci�n
+		
+		//Comprobamos que  no existe y se tienen permisos
+		try{
+			if(file.exists()==false && carpetaDeTrabajo.canWrite()==true){
+					file.mkdir();
+					System.out.println("Directorio creado correctamente.");
+			}
+			else{
+					JOptionPane.showMessageDialog(null, "El directorio ya existe.");
+					System.err.println("No se pudo crear la carpeta.");
+			}
+		}
+		catch(SecurityException error){
+			System.err.println("Error al crear la carpeta.");
+		}
+		
 		actualiza();
 	}
 
 	@Override
 	public void creaFichero(String arg0) throws GestionFicherosException {
 		// TODO Auto-generated method stub
-
+		File file = new File(carpetaDeTrabajo,arg0);
+		
+		//Comprobamos que no existe y se tienen permisos
+				try{
+					if(file.exists()==false && carpetaDeTrabajo.canWrite()==true){
+							try {
+								file.createNewFile();
+								System.out.println("Fichero creado correctamente.");
+							} 
+							catch (IOException error) {
+								System.err.println("No se ha podido crear el fichero");
+							}
+					}
+					else{
+							JOptionPane.showMessageDialog(null, "El fichero ya existe.");
+							System.err.println("No se pudo crear el fichero.");
+					}
+				}
+				catch(SecurityException error){
+					System.err.println("Error al crear el fichero.");
+				}
+				
+				actualiza();
 	}
 
 	@Override
 	public void elimina(String arg0) throws GestionFicherosException {
 		// TODO Auto-generated method stub
+		File file = new File(carpetaDeTrabajo, arg0);
+		
+		//Si existe el archivo, lo eliminamos.
+		try{
+			if(file.exists()==true && file.canWrite()==true){
+				file.delete();
+				System.out.println("Archivo eliminado correctamente.");
+			}
+		}
+		catch(SecurityException error){
+			System.err.println("No se pudo eliminar dicho archivo.");
+		}
 
+		actualiza();
 	}
 
 	@Override
@@ -316,8 +366,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 	}
 
 	@Override
-	public void renombra(String arg0, String arg1)
-			throws GestionFicherosException {
+	public void renombra(String arg0, String arg1) throws GestionFicherosException {
 		// TODO Auto-generated method stub
 
 	}
